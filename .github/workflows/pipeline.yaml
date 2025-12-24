@@ -27,7 +27,6 @@ jobs:
     - name: Generate Report 
       run: make report
 
-
     - name: Copy Files 
       run: |
         mkdir reports
