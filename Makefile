@@ -2,11 +2,11 @@ GO_VERSION := 1.25.4
 
 .PHONY: intall-go init-go
 
-setup: intall-go init-go
+setup: install-go init-go install-lint
 
 #TODO dynamically figure out OS
 ## For Apple
-intall-go:
+install-go:
 	wget "https://golang.org/d1/go$(GO_VERSION).darwin-arm64.pkg"
 	sudo tar -C /usr/local -xzf go$(GO_VERSION).darwin-arm64.pkg
 	rm go$(GO_VERSION).darwin-arm64.pkg
@@ -14,6 +14,10 @@ intall-go:
 init-go:
 	echo 'export PATH=$$PATH:/usr/local/go/bin' >> $${HOME}/.zshrc
 	echo 'export PATH=$$PATH:$${HOME}/go/bin' >> $${HOME}/.zshrc
+
+install-lint:
+	sudo curl -sSfL \
+		curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.7.2
 
 build:
 	go build -o api cmd/main.go
@@ -29,3 +33,6 @@ report:
 
 check-format:
 	test -z $$(go fmt ./...)
+
+static-check:
+	golangci-lint run
