@@ -18,11 +18,27 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v5
 
-    - name: Downloads
-      run: go get -t ./...
-
     - name: Run Test 
-      run: go test ./...
+      run: make test
+
+    - name: Coverage Check 
+      run: make coverage
+
+    - name: Generate Report 
+      run: make report
+
+
+    - name: Copy Files 
+      run: |
+        mkdir reports
+        cp cover.html reports/.
+
+
+    - name: Archive
+      uses: actions/upload-artifact@v6
+      with:
+          name: reports
+          path: reports
 
   build:
     name: Build App
