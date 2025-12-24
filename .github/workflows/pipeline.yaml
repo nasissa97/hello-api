@@ -104,30 +104,52 @@ jobs:
           asset_name: api
           asset_content_type: application/octet-stream
 
-  deploy-function:
-    name: Deploy FaaS
-    runs-on: ubuntu-latest
-    needs: test
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v5
-      with:
-          fetch-depth: 0
-    - id: auth
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-          credentials_json: ${{ secrets.gcp_credentials }}
-    - name: Deploy function
-      id: deploy
-      uses: google-github-actions/deploy-cloud-functions@v2
-      with:
-          name: translate
-          entry_point: Translate
-          runtime: go125
-          project_id: ${{ secrets.project_id }}
-          region: us-central1
-    - id: test
-      run: curl "${{ steps.deploy.outputs.url }}/hello"
+  # deploy-function:
+  #   name: Deploy FaaS
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  #   steps:
+  #   - name: Check out code into the Go module directory
+  #     uses: actions/checkout@v5
+  #     with:
+  #         fetch-depth: 0
+  #   - id: auth
+  #     name: Authenticate to Google Cloud
+  #     uses: google-github-actions/auth@v2
+  #     with:
+  #         credentials_json: ${{ secrets.gcp_credentials }}
+  #   - name: Deploy function
+  #     id: deploy
+  #     uses: google-github-actions/deploy-cloud-functions@v2
+  #     with:
+  #         name: translate
+  #         entry_point: Translate
+  #         runtime: go125
+  #         project_id: ${{ secrets.project_id }}
+  #         region: us-central1
+  #   - id: test
+  #     run: curl "${{ steps.deploy.outputs.url }}/hello"
+
+  # deploy-paas:
+  #   name: Deploy PaaS
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  #   steps:
+  #   - name: Check out code into the Go module directory
+  #     uses: actions/checkout@v6
+  #     with:
+  #       fetch-depth: 0
+  #   - id: auth
+  #     name: Authenticate to Google Cloud
+  #     uses: google-github-actions/auth@v2
+  #     with:
+  #         credentials_json: ${{ secrets.gcp_credentials }}
+  #   - name: Deploy App
+  #     id: deploy
+  #     uses: google-github-actions/deploy-appengine@main
+  #   - id: test
+  #     run: curl "${{ steps.deploy.outputs.url }}/translate/hello"
+
 
