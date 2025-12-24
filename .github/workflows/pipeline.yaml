@@ -23,22 +23,22 @@ jobs:
       run: make check-format
     - name: Vet
       run: go vet ./...
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - uses: actions/setup-go@v6
-  #       with:
-  #         go-version: stable
-  #     - name: Lint
-  #       uses: golangci/golangci-lint-action@v9
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      - name: Lint
+        uses: golangci/golangci-lint-action@v9
 
   test: 
     name: Test Application
     needs:
       - format-check
-      # - lint
+      - lint
     runs-on: ubuntu-latest
     steps:
     - name: Set up Go 1.x
