@@ -88,11 +88,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Still in experimentation phase
-        draft: true
-        prerelease: true
+          release_name: Release ${{ github.ref }}
+          body: |
+            Still in experimentation phase
+          draft: true
+          prerelease: true
       - name: Upload Release Binary
         uses: softprops/action-gh-release@v2
         env:
