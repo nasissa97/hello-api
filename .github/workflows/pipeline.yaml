@@ -25,6 +25,8 @@ jobs:
       run: go vet ./...
   test: 
     name: Test Application
+    needs:
+      - format-check
     runs-on: ubuntu-latest
     steps:
     - name: Set up Go 1.x
