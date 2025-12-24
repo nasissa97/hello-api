@@ -104,3 +104,24 @@ jobs:
           asset_name: api
           asset_content_type: application/octet-stream
 
+  deploy-function:
+    name: Deploy FaaS
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/head/main' }}
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v5
+      with:
+          fetch-depth: 0
+    - name: Deploy function
+      id: deploy
+      uses: google-github-actions/deploy-cloud-function@main
+      with:
+          name: translate
+          entry_point: Translate
+          runtime: go125
+          credentials: ${{ secrets.gcp_credentials }}
+    - id: test
+      run: curl "${{ steps.deploy.outputs.url }}/hello"
+
