@@ -1,3 +1,4 @@
+// Package rest handlers for API.
 package rest
 
 import (
