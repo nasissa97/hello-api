@@ -19,6 +19,10 @@ init-go:
 install-lint:
 	sudo curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.5
 
+copy-hooks:
+	chmod +x ./scripts/hooks/pre-commit.sh
+	cp -r ./scripts/hooks/ .git/pre-commit
+
 build:
 	go build -o api cmd/main.go
 
@@ -37,6 +41,3 @@ check-format:
 static-check:
 	golangci-lint run
 
-copy-hooks:
-	chmod +x ./scripts/hooks/pre-commit.sh
-	cp -r ./scripts/hooks/ .git/.
