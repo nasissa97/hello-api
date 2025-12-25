@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"hello-api/handlers/rest"
+	"hello-api/translation"
 )
 
 func main() {
@@ -13,7 +14,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/hello", rest.TranslateHandler)
+	translationService := translation.NewStaticService()
+	translateHandler := rest.NewTranslateHandler(translationService)
+	mux.HandleFunc("/hello", translateHandler.TranslateHandler)
 
 	server := &http.Server{
 		Addr:              addr,
@@ -27,9 +30,4 @@ func main() {
 	log.Printf("listening on %s\n", addr)
 
 	log.Fatal(server.ListenAndServe())
-}
-
-type Resp struct {
-	Language    string `json:"language"`
-	Translation string `json:"translation"`
 }

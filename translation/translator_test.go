@@ -64,8 +64,9 @@ func TestTranslate(t *testing.T) {
 		},
 	}
 
+	underTest := translation.NewStaticService()
 	for _, test := range tt {
-		res := translation.Translate(test.Language, test.Word)
+		res := underTest.Translate(test.Language, test.Word)
 		if res != test.Translation {
 			t.Errorf(`expected "%s" to be "%s" form "%s" but received "%s"`,
 				test.Word, test.Language, test.Translation, res)

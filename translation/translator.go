@@ -5,8 +5,15 @@ import (
 	"strings"
 )
 
+// StaticService has data that does not change.
+type StaticService struct{}
+
+func NewStaticService() *StaticService {
+	return &StaticService{}
+}
+
 // Translate converts word from english to language.
-func Translate(language string, word string) string {
+func (s *StaticService) Translate(language string, word string) string {
 	word = sanitizeInput(word)
 	language = sanitizeInput(language)
 	if word != "hello" {
