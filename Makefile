@@ -3,7 +3,7 @@ GO_VERSION := 1.25.4
 
 .PHONY: intall-go init-go
 
-setup: install-go init-go install-lint
+setup: install-go init-go install-lint copy-hooks
 
 #TODO dynamically figure out OS
 ## For Apple
@@ -36,3 +36,7 @@ check-format:
 
 static-check:
 	golangci-lint run
+
+copy-hooks:
+	chmod +x ./scripts/hooks/pre-commit.sh
+	cp -r ./scripts/hooks/ .git/.
