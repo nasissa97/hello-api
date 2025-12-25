@@ -15,6 +15,7 @@ type Resp struct {
 	Translation string `json:"translation"`
 }
 
+// TranslateHandler accepts a request then translate hello to language in query.
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	enc := json.NewEncoder(w)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
