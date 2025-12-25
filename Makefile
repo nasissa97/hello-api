@@ -1,5 +1,6 @@
 GO_VERSION := 1.25.4
 
+
 .PHONY: intall-go init-go
 
 setup: install-go init-go install-lint
@@ -16,8 +17,7 @@ init-go:
 	echo 'export PATH=$$PATH:$${HOME}/go/bin' >> $${HOME}/.zshrc
 
 install-lint:
-	sudo curl -sSfL \
-		curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.7.2
+	sudo curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.5
 
 build:
 	go build -o api cmd/main.go

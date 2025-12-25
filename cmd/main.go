@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"hello-api/handlers/rest"
 )
@@ -14,9 +15,18 @@ func main() {
 
 	mux.HandleFunc("/hello", rest.TranslateHandler)
 
+	server := &http.Server{
+		Addr:              addr,
+		Handler:           mux,
+		ReadHeaderTimeout: 3 * time.Second,
+		ReadTimeout:       5 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       30 * time.Second,
+	}
+
 	log.Printf("listening on %s\n", addr)
 
-	log.Fatal(http.ListenAndServe(addr, mux))
+	log.Fatal(server.ListenAndServe())
 }
 
 type Resp struct {

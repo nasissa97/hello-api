@@ -1,3 +1,4 @@
+// Package faas is the entry point for faas.
 package faas
 
 import (

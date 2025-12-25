@@ -1,9 +1,11 @@
+// Package translation is a service to handle translation
 package translation
 
 import (
 	"strings"
 )
 
+// Translate converts word from english to language.
 func Translate(language string, word string) string {
 	word = sanitizeInput(word)
 	language = sanitizeInput(language)
