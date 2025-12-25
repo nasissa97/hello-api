@@ -5,11 +5,24 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
-
-	"hello-api/translation"
 )
 
 const defaultLanguage = "english"
+
+type Translator interface {
+	Translate(language string, word string) string
+}
+
+// TranslateHandler will translate calls for caller.
+type TranslateHandler struct {
+	service Translator
+}
+
+func NewTranslateHandler(service Translator) *TranslateHandler {
+	return &TranslateHandler{
+		service: service,
+	}
+}
 
 type Resp struct {
 	Language    string `json:"language"`
@@ -17,7 +30,7 @@ type Resp struct {
 }
 
 // TranslateHandler accepts a request then translate hello to language in query.
-func TranslateHandler(w http.ResponseWriter, r *http.Request) {
+func (t *TranslateHandler) TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	enc := json.NewEncoder(w)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -26,7 +39,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		language = defaultLanguage
 	}
 	word := strings.ReplaceAll(r.URL.Path, "/", "")
-	translation := translation.Translate(language, word)
+	translation := t.service.Translate(language, word)
 	if translation == "" {
 		w.WriteHeader(http.StatusNotFound)
 		return
