@@ -3,7 +3,7 @@ GO_VERSION := 1.25.4
 
 .PHONY: intall-go init-go
 
-setup: install-go init-go install-lint
+setup: install-go init-go install-lint copy-hooks
 
 #TODO dynamically figure out OS
 ## For Apple
@@ -18,6 +18,15 @@ init-go:
 
 install-lint:
 	sudo curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.5
+
+copy-hooks:
+	@echo "Installing git hooks..."
+	@mkdir -p .git/hooks
+	@for hook in $(shell ls scripts/hooks); do \
+		cp scripts/hooks/$$hook .git/hooks/$${hook%.*}; \
+		chmod +x .git/hooks/$${hook%.*}; \
+		echo "Installed $${hook%.*}"; \
+	done
 
 build:
 	go build -o api cmd/main.go
@@ -36,3 +45,4 @@ check-format:
 
 static-check:
 	golangci-lint run
+
