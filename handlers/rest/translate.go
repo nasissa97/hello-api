@@ -38,6 +38,8 @@ func (t *TranslateHandler) TranslateHandler(w http.ResponseWriter, r *http.Reque
 	if language == "" {
 		language = defaultLanguage
 	}
+
+	language = strings.ToLower(language)
 	word := strings.ReplaceAll(r.URL.Path, "/", "")
 	translation := t.service.Translate(language, word)
 	if translation == "" {
