@@ -10,7 +10,7 @@ import (
 
 func Translate(w http.ResponseWriter, r *http.Request) {
 	svc := translation.NewStaticService()
-	handler := *rest.NewTranslateHandler(svc)
+	handler := *rest.NewTranslateHandler(svc, "english")
 
 	handler.TranslateHandler(w, r)
 }
