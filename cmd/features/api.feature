@@ -12,7 +12,9 @@ Feature: Translate API
     Given the word "goodbye"
     When I translate it to "german"
     Then the response should be ""
-  Scenario: Translation unknown
+
+  @smoke-test
+  Scenario: Lanugage unknown
     Given the word "hello"
     When I translate it to "bulgarian"
     Then the response should be ""
