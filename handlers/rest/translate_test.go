@@ -51,7 +51,7 @@ func TestTranslateAPI(t *testing.T) {
 		},
 	}
 
-	underTest := rest.NewTranslateHandler(&stubbedService{})
+	underTest := rest.NewTranslateHandler(&stubbedService{}, "english")
 	handler := http.HandlerFunc(underTest.TranslateHandler)
 	for _, test := range tt {
 

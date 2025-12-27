@@ -5,17 +5,26 @@ import (
 	"net/http"
 	"time"
 
+	"hello-api/config"
 	"hello-api/handlers/rest"
 	"hello-api/translation"
 )
 
 func main() {
-	addr := ":8080"
+	cfg := config.LoadConfiguration()
+	addr := cfg.Port
 
 	mux := http.NewServeMux()
 
-	translationService := translation.NewStaticService()
-	translateHandler := rest.NewTranslateHandler(translationService)
+	var translationService rest.Translator
+	translationService = translation.NewStaticService()
+	if cfg.LegacyEndpoint != "" {
+		log.Printf("creating external translation client: %s", cfg.LegacyEndpoint)
+		client := translation.NewHelloClient(cfg.LegacyEndpoint)
+		translationService = translation.NewRemoteService(client)
+	}
+
+	translateHandler := rest.NewTranslateHandler(translationService, cfg.DefaultLanguage)
 	mux.HandleFunc("/hello", translateHandler.TranslateHandler)
 
 	server := &http.Server{
