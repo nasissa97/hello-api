@@ -3,7 +3,7 @@ GO_VERSION := 1.25.4
 
 .PHONY: intall-go init-go
 
-setup: install-go init-go install-lint copy-hooks
+setup: install-go init-go install-lint copy-hooks install-godog
 
 #TODO dynamically figure out OS
 ## For Apple
@@ -18,6 +18,9 @@ init-go:
 
 install-lint:
 	sudo curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.5
+
+install-godog:
+	go install github.com/cucumber/godog/cmd/godog@latest
 
 copy-hooks:
 	@echo "Installing git hooks..."
