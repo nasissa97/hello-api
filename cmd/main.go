@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"hello-api/config"
+	"hello-api/handlers"
 	"hello-api/handlers/rest"
 	"hello-api/translation"
 )
@@ -47,6 +48,7 @@ func API(cfg config.Configuration) *http.ServeMux {
 
 	translateHandler := rest.NewTranslateHandler(translationService, cfg.DefaultLanguage)
 	mux.HandleFunc("/hello", translateHandler.TranslateHandler)
+	mux.HandleFunc("/health", handlers.HealthCheck)
 
 	return mux
 }

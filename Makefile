@@ -49,3 +49,30 @@ check-format:
 static-check:
 	golangci-lint run
 
+install-helm:
+	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+	chmod 700 get_helm.sh
+	./get_helm.sh
+
+install-redis:
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm repo update
+	kubectl create secret generic redis-cluster \
+		--from-literal=redis-password=$$(openssl rand -base64 12) \
+		--dry-run=client -o yaml | kubectl apply -f -
+	
+	helm upgrade --install redis-cluster bitnami/redis \
+		--set auth.existingSecret=redis-cluster \
+		--set auth.existingSecretPasswordKey=redis-password \
+		--set architecture=replication \
+		--set master.persistence.enabled=false \
+		--set replica.persistence.enabled=false
+
+build-image-prod:
+	docker build -t hello-api:min .
+
+build-image-dev:
+	docker build -t hello-api:dev --target dev .
+
+load-image-in-cluster:
+	kind load docker-image hello-api:min

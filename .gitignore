@@ -34,3 +34,4 @@ api
 *.html
 
 data/
+get_helm.sh
