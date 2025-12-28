@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-api
+  template:
+    metadata:
+      name: hello-api
+      labels:
+        app: hello-api
+    spec:
+      containers:
+        - name: hello-api
+          image: hello-api:min
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: hello-api-port
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: hello-api
+                key: database_url
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redis-cluster
+                key: redis-password
+                optional: false
+          
+
